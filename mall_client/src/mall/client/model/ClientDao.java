@@ -6,8 +6,10 @@ import mall.client.vo.Client;
 
 public class ClientDao {
 	private DBUtil dbUtil;
+	
 	public Client login(Client client) {
 		this.dbUtil = new DBUtil();
+		
 		Client returnClient = null;
 		Connection conn = null;
 		PreparedStatement stmt = null;

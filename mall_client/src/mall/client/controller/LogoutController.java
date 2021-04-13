@@ -12,8 +12,7 @@ import javax.servlet.http.HttpSession;
 public class LogoutController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		session.invalidate();
-		
-		response.sendRedirect(request.getContextPath()+"/IndexController");
+		session.invalidate(); // 세션초기화 
+		response.sendRedirect(request.getContextPath()+"/IndexController"); // 초기화후 메인화면으로 이동
 	}
 }
