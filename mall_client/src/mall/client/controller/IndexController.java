@@ -35,7 +35,7 @@ public class IndexController extends HttpServlet {
 		// View forward
 		request.setAttribute("ebookList", ebookList);
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/index.jsp");
-		rd.forward(request, response);
+		rd.forward(request, response); // request안에 ebookList 저장된채로 forward
 	}
 
 }
