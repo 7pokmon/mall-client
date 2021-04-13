@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import mall.client.model.CartDao;
+import mall.client.vo.Client;
 
 @WebServlet("/CartListController")
 public class CartListController extends HttpServlet {
@@ -26,7 +27,8 @@ public class CartListController extends HttpServlet {
 		}
 		// dao 호출
 		this.cartdao = new CartDao();
-		List<Map<String, Object>> cartList = this.cartdao.selectCartList();
+		// 로그인한 ID로만 조회 가능
+		List<Map<String, Object>> cartList = this.cartdao.selectCartList(((Client)(session.getAttribute("loginClient"))).getClientMail());
 		// forward
 		request.setAttribute("cartList", cartList);
 		RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/view/cart/cartList.jsp");

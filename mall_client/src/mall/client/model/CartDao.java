@@ -7,7 +7,7 @@ import mall.client.commons.DBUtil;
 public class CartDao {
 	private DBUtil dbUtil;
 	
-	public List<Map<String, Object>> selectCartList() {
+	public List<Map<String, Object>> selectCartList(String ClientMail) {
 		this.dbUtil = new DBUtil();
 		List<Map<String, Object>> list = new ArrayList<>();
 		Connection conn = null;
@@ -25,9 +25,10 @@ public class CartDao {
 		 * 
 		 */
 		try {
-			String sql = "SELECT c.cart_no cartNo, e.ebook_no ebookNo, e.ebook_title ebookTitle, c.cart_date cartDate FROM cart c INNER JOIN ebook e ON c.ebook_no = e.ebook_no";
+			String sql = "SELECT c.cart_no cartNo, e.ebook_no ebookNo, e.ebook_title ebookTitle, c.cart_date cartDate FROM cart c INNER JOIN ebook e ON c.ebook_no = e.ebook_no WHERE c.clientMail=?";
 			conn = this.dbUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, ClientMail);
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
