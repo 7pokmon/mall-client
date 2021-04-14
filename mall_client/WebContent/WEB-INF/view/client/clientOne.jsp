@@ -22,7 +22,7 @@
 	 	<tr>
 	 		<td><%=clientOne.getClientNo()%></td>
 	 		<td><%=clientOne.getClientMail()%></td>
-	 		<td><%=clientOne.getClientDate().substring(1, 10)%></td>
+	 		<td><%=clientOne.getClientDate().substring(0, 10)%></td>
 	 	</tr>
 	 </table>
 </body>
