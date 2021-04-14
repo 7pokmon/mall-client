@@ -6,6 +6,39 @@ import mall.client.vo.Client;
 
 public class ClientDao {
 	private DBUtil dbUtil;
+	// 회원정보
+	public Client clientOne(String clientMail) {
+		// 초기화
+		Client client = null;
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			// sql
+			String sql = "SELECT client_no clientNo, client_mail clientMail, client_date clientDate FROM client WHERE client_mail=?";
+			// DB
+			conn = this.dbUtil.getConnection();
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, clientMail);
+			rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				client = new Client();
+				client.setClientNo(rs.getInt("clientNo"));
+				client.setClientMail(rs.getString("clientMail"));
+				client.setClientDate(rs.getString("clientDate"));
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(rs, stmt, conn);
+		}
+		
+		return client;
+	}
 	
 	// 이메일 중복검사
 	public String selectClientMail(String clientMail) {

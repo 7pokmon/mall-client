@@ -44,7 +44,6 @@ public class InsertClientController extends HttpServlet {
 			return;
 		}
 		// 회원가입
-		this.clientDao = new ClientDao();
 		Client client = new Client();
 		client.setClientMail(ClientMail);
 		client.setClientPw(ClientPw);
