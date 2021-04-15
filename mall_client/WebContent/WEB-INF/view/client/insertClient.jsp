@@ -6,6 +6,8 @@
 <title>insertClient</title>
 </head>
 <body>
+	<!-- 메인메뉴 상단 -->
+	<jsp:include page="/WEB-INF/view/inc/mainMenu.jsp"></jsp:include>
 	<h1>회원가입</h1>
 	<form action="<%=request.getContextPath()%>/InsertClientController" method="post">
 		ID : <input type="text" name="clientMail">

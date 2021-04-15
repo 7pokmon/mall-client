@@ -12,6 +12,7 @@ if(session.getAttribute("loginClient") == null) {
 			<button type="submit">로그인</button>
 		</form>
 		<ul>
+			<li><a href="<%=request.getContextPath()%>/IndexController">홈으로</a></li>
 			<!-- InsertClientController -> /view/client/insertClient.jsp -->
 			<li><a href="<%=request.getContextPath()%>/InsertClientController">회원가입</a></li>
 		</ul>
@@ -25,6 +26,7 @@ if(session.getAttribute("loginClient") == null) {
 			<%=((Client)(session.getAttribute("loginClient"))).getClientMail()%>님 반갑습니다.
 		</div>
 		<ul>
+			<li><a href="<%=request.getContextPath()%>/IndexController">홈으로</a></li>
 			<li><a href="<%=request.getContextPath()%>/LogoutController">로그아웃</a></li>
 			<!-- ClientOneController -> ClientDao.selectClientOne() -> /view/client/ClientOne.jsp -->
 			<li><a href="<%=request.getContextPath()%>/ClientOneController">회원정보</a></li>
