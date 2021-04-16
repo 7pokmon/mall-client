@@ -9,9 +9,9 @@
 </head>
 <body>
 <%
-	List<Map<String, Object>> orderslist = (List<Map<String, Object>>) request.getAttribute("ordersList");
-	int currentPage = (int)request.getAttribute("currentPage");
-	int lastPage = (int)request.getAttribute("lastPage");
+	List<Map<String, Object>> orderslist = (List<Map<String, Object>>)request.getAttribute("ordersList");
+	int currentPage = (int) request.getAttribute("currentPage");
+	int lastPage = (int) request.getAttribute("lastPage");
 %>
 	<h1>주문리스트</h1>
 	<table border="1">

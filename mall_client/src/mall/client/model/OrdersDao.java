@@ -44,7 +44,7 @@ public class OrdersDao {
 	}
 	
 	// 주문리스트
-	public List<Map<String, Object>> selectOrderListByClient(int beginRow, int rowPerPage, int clientNo) {
+	public List<Map<String, Object>> selectOrderListByClient(int beginRow, int rowPerPage, Client client) {
 		// 초기화
 		List<Map<String, Object>> list = new ArrayList<>();
 		this.dbUtil = new DBUtil();
@@ -69,7 +69,7 @@ public class OrdersDao {
 			String sql = "SELECT o.orders_no ordersNo, o.ebook_no ebookNo, o.orders_date ordersDate,o.orders_state ordersState, e.ebook_title ebookTitle, e.ebook_price ebookPrice FROM orders o INNER JOIN ebook e On o.ebook_no = e.ebook_no WHERE o.client_no=? LIMIT ?,?";
 			conn = this.dbUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, clientNo);
+			stmt.setInt(1, client.getClientNo());
 			stmt.setInt(2, beginRow);
 			stmt.setInt(3, rowPerPage);
 			// 디버깅

@@ -25,17 +25,18 @@ public class OrdersListController extends HttpServlet {
 	         return;
 	      }
 	    // 의존객체 생성 후 주입
-		this.ordersDao = new OrdersDao();
+		ordersDao = new OrdersDao();
 		// 세션에서 client 가져오기
 		Client client = (Client)session.getAttribute("loginClient");
 		
 		// 현재페이지
+		
 		int currentPage = 1;
 		if (request.getParameter("currentPage") != null) {
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
 		// 페이지당 보여줄 수
-		int rowPerPage = 10;
+		int rowPerPage = 15;
 		// 첫페이지
 		int beginRow = (currentPage - 1) * rowPerPage;
 		// 전체페이지
@@ -47,10 +48,12 @@ public class OrdersListController extends HttpServlet {
 		}
 		
 		// model 호출
-		List<Map<String, Object>> ordersList = this.ordersDao.selectOrderListByClient(beginRow,rowPerPage,client.getClientNo());
-		request.setAttribute("ordersList", ordersList);	
+		List<Map<String, Object>> ordersList = this.ordersDao.selectOrderListByClient(beginRow, rowPerPage, client);
 		
 		// View forward
+		request.setAttribute("ordersList", ordersList);	
+		request.setAttribute("lastPage", lastPage);
+		request.setAttribute("currentPage", currentPage);
 		request.getRequestDispatcher("WEB-INF/view/orders/ordersList.jsp").forward(request, response);
 	}
 
