@@ -4,14 +4,48 @@ import java.sql.*;
 import java.util.*;
 
 import mall.client.commons.DBUtil;
+import mall.client.vo.Client;
 import mall.client.vo.Orders;
 
 public class OrdersDao {
 	private DBUtil dbUtil;
 	
+	// 페이징
+	public int totalCount(Client client) {
+		// 초기화
+		int totalCnt = 0;
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		// DB
+		try {
+			String sql = "SELECT COUNT(*) cnt FROM orders WHERE client_no=?";
+			conn = this.dbUtil.getConnection();
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, client.getClientNo());
+			// 디버깅
+			System.out.println(stmt+"<-- 주문페이징stmt");
+			rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				totalCnt = rs.getInt("cnt");
+				System.out.println("검색어totalCnt : "+ totalCnt);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(rs, stmt, conn);
+		}
+		
+		return totalCnt;
+	}
+	
 	// 주문리스트
-	public List<Map<String, Object>> selectOrderListByClient(int clientNo) {
-		//초기화
+	public List<Map<String, Object>> selectOrderListByClient(int beginRow, int rowPerPage, int clientNo) {
+		// 초기화
 		List<Map<String, Object>> list = new ArrayList<>();
 		this.dbUtil = new DBUtil();
 		Connection conn = null;
@@ -32,10 +66,12 @@ public class OrdersDao {
 			 *  On o.ebook_no = e.ebook_no
 			 *  WHERE o.client_no = ?
 			 */
-			String sql = "SELECT o.orders_no ordersNo, o.ebook_no ebookNo, o.orders_date ordersDate,o.orders_state ordersState, e.ebook_title ebookTitle, e.ebook_price ebookPrice FROM orders o INNER JOIN ebook e On o.ebook_no = e.ebook_no WHERE o.client_no=?";
+			String sql = "SELECT o.orders_no ordersNo, o.ebook_no ebookNo, o.orders_date ordersDate,o.orders_state ordersState, e.ebook_title ebookTitle, e.ebook_price ebookPrice FROM orders o INNER JOIN ebook e On o.ebook_no = e.ebook_no WHERE o.client_no=? LIMIT ?,?";
 			conn = this.dbUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, clientNo);
+			stmt.setInt(2, beginRow);
+			stmt.setInt(3, rowPerPage);
 			// 디버깅
 			System.out.println(stmt+"<-- 주문리스트stmt");
 			rs = stmt.executeQuery();

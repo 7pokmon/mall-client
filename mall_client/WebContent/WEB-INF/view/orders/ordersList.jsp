@@ -8,9 +8,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%
+<%
 	List<Map<String, Object>> orderslist = (List<Map<String, Object>>) request.getAttribute("ordersList");
-	%>
+	int currentPage = (int)request.getAttribute("currentPage");
+	int lastPage = (int)request.getAttribute("lastPage");
+%>
 	<h1>주문리스트</h1>
 	<table border="1">
 		<tr>
@@ -36,5 +38,19 @@
 		}
 		%>
 	</table>
+	<!-- 페이징 -->
+<%
+	if(currentPage > 1) { // 첫페이지 이전버튼 비활성
+%>
+		<a href="<%=request.getContextPath()%>/OrdersListController?currentPage=<%=currentPage-1%>">이전</a>
+<%
+	}
+	
+	if(currentPage < lastPage) { // 마지막페이지 다음버튼 비활성
+%>
+		<a href="<%=request.getContextPath()%>/OrdersListController?currentPage=<%=currentPage+1%>">다음</a>
+<%
+	}
+%>
 </body>
 </html>

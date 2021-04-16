@@ -26,10 +26,28 @@ public class OrdersListController extends HttpServlet {
 	      }
 	    // 의존객체 생성 후 주입
 		this.ordersDao = new OrdersDao();
+		// 세션에서 client 가져오기
+		Client client = (Client)session.getAttribute("loginClient");
+		
+		// 현재페이지
+		int currentPage = 1;
+		if (request.getParameter("currentPage") != null) {
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}
+		// 페이지당 보여줄 수
+		int rowPerPage = 10;
+		// 첫페이지
+		int beginRow = (currentPage - 1) * rowPerPage;
+		// 전체페이지
+		int totalRow = ordersDao.totalCount(client);
+		// 마지막페이지
+		int lastPage = totalRow / rowPerPage;
+		if (totalRow % rowPerPage != 0) {
+			lastPage += 1;
+		}
 		
 		// model 호출
-		Client client = (Client)session.getAttribute("loginClient");
-		List<Map<String, Object>> ordersList = this.ordersDao.selectOrderListByClient(client.getClientNo());
+		List<Map<String, Object>> ordersList = this.ordersDao.selectOrderListByClient(beginRow,rowPerPage,client.getClientNo());
 		request.setAttribute("ordersList", ordersList);	
 		
 		// View forward
