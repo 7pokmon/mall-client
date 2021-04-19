@@ -30,6 +30,8 @@
 	}
 	//카테고리 리스트
 	List<String> categoryList = (List<String>) (request.getAttribute("categoryList"));
+	//인기상품 리스트
+	List<Map<String, Object>> bestOrdersList = (List<Map<String, Object>>)(request.getAttribute("bestOrdersList"));
 	%>
 	<a href="<%=request.getContextPath()%>/IndexController">전체</a>
 	<%
@@ -45,6 +47,29 @@
 		Search Title : <input type="text" name="searchWord">
 		<button type="submit">검색</button>
 	</form>
+	<h1>Best Ebook</h1>
+	<table border="1">
+		<tr>
+		<%
+			for(Map m : bestOrdersList){
+		%>
+			
+				<td>
+					<div><img src="<%=request.getContextPath()%>/img/default.jpg"></div>
+					<div>
+						<a href="<%=request.getContextPath()%>/EbookOneController?ebookNo=<%=m.get("ebookNo")%>">
+						<%=m.get("ebookTitle")%>
+						</a>
+					</div>
+					<div><%=m.get("ebookPrice")%></div>
+				</td>
+			
+		<%
+			}
+		%>
+		</tr>
+	</table>
+	<h1>Ebook List</h1>
 	<table border="1">
 		<tr>
 			<%

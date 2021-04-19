@@ -10,6 +10,49 @@ import mall.client.vo.Orders;
 public class OrdersDao {
 	private DBUtil dbUtil;
 	
+	// 인기상품
+	public List<Map<String, Object>> selectBestOrdersList() {
+		// 초기화
+		List<Map<String, Object>> list = new ArrayList<>();
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		// DB
+		try {
+			String sql = "SELECT t.ebook_no ebookNo, t.cnt cnt, e.ebook_title ebookTitle, e.ebook_price ebookPrice"
+					+ " FROM"
+					+ "	(SELECT ebook_no, COUNT(ebook_no) cnt"
+					+ "	FROM orders"
+					+ "	WHERE orders_state = '주문완료'"
+					+ "	GROUP BY ebook_no"
+					+ "	HAVING COUNT(ebook_no) > 1"
+					+ "	LIMIT 5) t INNER JOIN ebook e"
+					+ " ON t.ebook_no = e.ebook_no"
+					+ "	ORDER BY t.cnt DESC";
+			
+			conn = this.dbUtil.getConnection();
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("ebookNo", rs.getInt("ebookNo"));
+				map.put("cnt", rs.getInt("cnt"));
+				map.put("ebookTitle", rs.getString("ebookTitle"));
+				map.put("ebookPrice", rs.getInt("ebookPrice"));
+				list.add(map);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(rs, stmt, conn);
+		}
+		return list;
+	}
+	
 	// 페이징
 	public int totalCount(Client client) {
 		// 초기화

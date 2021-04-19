@@ -8,6 +8,42 @@ import mall.client.vo.*;
 public class EbookDao {
 	private DBUtil dbutil; 
 	
+	// 신간달력
+	public List<Map<String, Object>> selectEbookListByMonth(int year, int month) {
+		// 초기화
+		this.dbutil = new DBUtil();
+		List<Map<String, Object>> list = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			String sql = "SELECT ebook_no ebookNo, ebook_title ebookTitle, DAY(ebook_date) d"
+					+ " FROM ebook"
+					+ " WHERE YEAR(ebook_date) = ? AND MONTH(ebook_date) = ?";
+			conn = this.dbutil.getConnection();
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, year);
+			stmt.setInt(2, month);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Map map = new HashMap<>();
+				map.put("ebookNo", rs.getInt("ebookNo"));
+				map.put("ebookTitle", rs.getString("ebookTitle"));
+				map.put("d", rs.getInt("d"));
+				list.add(map);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+ 		} finally {
+ 			dbutil.close(rs, stmt, conn);
+ 		}
+		
+		return list;
+	}
+	
 	// 검색어별 전체페이지
 	public int searchTotalCount(String searchWord) {
 		// 초기화

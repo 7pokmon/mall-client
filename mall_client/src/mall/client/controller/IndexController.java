@@ -20,10 +20,12 @@ public class IndexController extends HttpServlet {
 	// model
 	private EbookDao ebookDao;
 	private CategoryDao categoryDao;
+	private OrdersDao ordersDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// model 호출
 		this.ebookDao = new EbookDao();
 		this.categoryDao = new CategoryDao();
+		this.ordersDao = new OrdersDao();
 		Ebook ebook = new Ebook();
 		
 		// 카테고리별 페이징
@@ -52,9 +54,12 @@ public class IndexController extends HttpServlet {
 		List<Ebook> ebookList = this.ebookDao.selectCategoryByPage(beginRow, rowPerPage, categoryName);
 		// 카테고리목록 호출
 		List<String> categoryList = this.categoryDao.categoryList();
+		// 인기상품목록 호출
+		List<Map<String, Object>> bestOrdersList = this.ordersDao.selectBestOrdersList();
 		
 		// View forward
 		// request안에 데이터담기
+		request.setAttribute("bestOrdersList", bestOrdersList);
 		request.setAttribute("categoryName", ebook.getCategoryName());
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("lastPage", lastPage);

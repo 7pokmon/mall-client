@@ -13,6 +13,9 @@
 	int currentPage = (int) request.getAttribute("currentPage");
 	int lastPage = (int) request.getAttribute("lastPage");
 %>
+	<!-- 메인메뉴상단 -->
+	<jsp:include page="/WEB-INF/view/inc/mainMenu.jsp"></jsp:include>
+	<!-- 주문리스트 -->
 	<h1>주문리스트</h1>
 	<table border="1">
 		<tr>
