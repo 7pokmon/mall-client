@@ -17,12 +17,13 @@ import mall.client.vo.Ebook;
 public class SearchIndexController extends HttpServlet {
 	private EbookDao ebookDao;
 	private CategoryDao categoryDao;
-
+	private OrdersDao ordersDao;
 	// 검색후 페이징
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// model 호출
 		this.ebookDao = new EbookDao();
 		this.categoryDao = new CategoryDao();
+		this.ordersDao = new OrdersDao();
 		Ebook ebook = new Ebook();
 
 		// 수집
@@ -50,9 +51,12 @@ public class SearchIndexController extends HttpServlet {
 		List<Ebook> ebookList = this.ebookDao.selectEbookListByPage(beginRow, rowPerPage, searchWord);
 		// 카테고리목록 호출
 		List<String> categoryList = this.categoryDao.categoryList();
-
+		// 인기상품목록 호출
+		List<Map<String, Object>> bestOrdersList = this.ordersDao.selectBestOrdersList();
+		
 		// View forward
 		// request안에 데이터담기
+		request.setAttribute("bestOrdersList", bestOrdersList);
 		request.setAttribute("searchWord", searchWord);
 		request.setAttribute("categoryName", ebook.getCategoryName());
 		request.setAttribute("currentPage", currentPage);
@@ -70,6 +74,7 @@ public class SearchIndexController extends HttpServlet {
 		// model 호출
 		this.ebookDao = new EbookDao();
 		this.categoryDao = new CategoryDao();
+		this.ordersDao = new OrdersDao();
 		Ebook ebook = new Ebook();
 
 		// 수집
@@ -97,9 +102,12 @@ public class SearchIndexController extends HttpServlet {
 		List<Ebook> ebookList = this.ebookDao.selectEbookListByPage(beginRow, rowPerPage, searchWord);
 		// 카테고리목록 호출
 		List<String> categoryList = this.categoryDao.categoryList();
-
+		// 인기상품목록 호출
+		List<Map<String, Object>> bestOrdersList = this.ordersDao.selectBestOrdersList();
+		
 		// View forward
 		// request안에 데이터담기
+		request.setAttribute("bestOrdersList", bestOrdersList);
 		request.setAttribute("searchWord", searchWord);
 		request.setAttribute("categoryName", ebook.getCategoryName());
 		request.setAttribute("currentPage", currentPage);
