@@ -36,7 +36,6 @@ public class EbookCalendarController extends HttpServlet {
 		// 마지막 일
 		int endDay = dday.getActualMaximum(Calendar.DATE);
 		
-		
 		// 현재달의 1일의 요일
 		Calendar firstDay = Calendar.getInstance();
 		firstDay.set(Calendar.YEAR, currentYear);
@@ -52,7 +51,30 @@ public class EbookCalendarController extends HttpServlet {
 		// 이달의 신간 ebook
 		List<Map<String, Object>> ebookListByMonth = this.ebookDao.selectEbookListByMonth(currentYear, currentMonth);
 		
+		// 이전달,년도 다음달,년도
+		int preYear = currentYear;
+		int preMonth = currentMonth - 1;
+		if(preMonth == 0) {
+			preMonth = 12;
+			preYear -= 1;
+			}
+		System.out.println(preYear+"preYear");
+		System.out.println(preMonth+"preMonth");
+		
+		int nextYear = currentYear;
+		int nextMonth = currentMonth + 1;
+		if(nextMonth == 13) {
+		nextMonth = 1;
+		nextYear += 1;
+		}
+		System.out.println(nextYear+"nextYear");
+		System.out.println(nextMonth+"nextMonth");
+		
 		// request안에 데이터담기
+		request.setAttribute("preYear", preYear);
+		request.setAttribute("preMonth", preMonth);
+		request.setAttribute("nextYear", nextYear);
+		request.setAttribute("nextMonth", nextMonth);
 		request.setAttribute("ebookListByMonth", ebookListByMonth);
 		request.setAttribute("currentYear", currentYear);
 		request.setAttribute("currentMonth", currentMonth);

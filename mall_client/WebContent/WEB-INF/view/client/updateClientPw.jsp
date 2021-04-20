@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="mall.client.vo.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +9,7 @@
 <!-- 메인메뉴 네비게이션 -->
 <jsp:include page="/WEB-INF/view/inc/mainMenu.jsp"></jsp:include>
 <h1>updateClientPw</h1>
-	<form action="<%=request.getContextPath()%>/UpdateClientPwController" method="post">
+	<form action="${pageContext.request.contextPath}/UpdateClientPwController" method="post">
 		<div>
 		변경할 비밀번호 : <input type="text" name="clientPw">
 		</div>

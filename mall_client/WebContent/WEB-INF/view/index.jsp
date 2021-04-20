@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.*"%>
 <%@ page import="mall.client.vo.*"%>
 <!DOCTYPE html>
@@ -17,131 +17,85 @@
 	<!-- 캘린더(이번달에 나온 책들) -->
 	<!-- 상품리스트 -->
 	<h1>index</h1>
-	<%
-	List<Ebook> ebookList = (List<Ebook>) (request.getAttribute("ebookList")); // ebook목록,검색어
-	int currentPage = (int) request.getAttribute("currentPage"); // 현재페이지
-	int lastPage = (int) request.getAttribute("lastPage"); // 마지막페이지
-	// 수집
-	String categoryName = (String) request.getAttribute("categoryName");
-	String searchWord = null;
-
-	if (request.getAttribute("searchWord") != null) { // 검색어가있으면
-		searchWord = (String) request.getAttribute("searchWord"); // 검색어저장
-	}
-	//카테고리 리스트
-	List<String> categoryList = (List<String>) (request.getAttribute("categoryList"));
-	//인기상품 리스트
-	List<Map<String, Object>> bestOrdersList = (List<Map<String, Object>>)(request.getAttribute("bestOrdersList"));
-	%>
-	<a href="<%=request.getContextPath()%>/IndexController">전체</a>
-	<%
-	for (String ct : categoryList) {
-	%>
-	<a
-		href="<%=request.getContextPath()%>/IndexController?categoryName=<%=ct%>"><%=ct%></a>
-	<%
-	}
-	%>
+	
+	<a href="${pageContext.request.contextPath}/IndexController">전체</a>
+	<c:forEach var="ct" items="${categoryList}">
+		<a href="${pageContext.request.contextPath}/IndexController?categoryName=${ct}">${ct}</a>
+	</c:forEach>
 	<!-- ebookTitle로 검색하기 -->
-	<form action="<%=request.getContextPath()%>/SearchIndexController">
+	<form action="${pageContext.request.contextPath}/SearchIndexController">
 		Search Title : <input type="text" name="searchWord">
 		<button type="submit">검색</button>
 	</form>
 	<h1>Best Ebook</h1>
 	<table border="1">
 		<tr>
-		<%
-			for(Map m : bestOrdersList){
-		%>
-			
+			<c:forEach var="m" items="${bestOrdersList}">
 				<td>
-					<div><img src="<%=request.getContextPath()%>/img/default.jpg"></div>
+					<div><img src="${pageContext.request.contextPath}/img/default.jpg"></div>
 					<div>
-						<a href="<%=request.getContextPath()%>/EbookOneController?ebookNo=<%=m.get("ebookNo")%>">
-						<%=m.get("ebookTitle")%>
+						<a href="${pageContext.request.contextPath}/EbookOneController?ebookNo=${m.ebookNo}">
+						${m.ebookTitle}
 						</a>
 					</div>
-					<div><%=m.get("ebookPrice")%></div>
+					<div>${m.ebookPrice}</div>
 				</td>
-			
-		<%
-			}
-		%>
+			</c:forEach>
 		</tr>
 	</table>
 	<h1>Ebook List</h1>
 	<table border="1">
 		<tr>
-			<%
-			int i = 0;
-			for (Ebook ebook : ebookList) {
-				i += 1;
-			%>
-			<td>
-				<div>
-					<img src="<%=request.getContextPath()%>/img/default.jpg">
-				</div> <!-- ebookOneController -> ebookDao.selectEbookOne() -> ebookOne.jsp -->
-				<div>
-					<a
-						href="<%=request.getContextPath()%>/EbookOneController?ebookNo=<%=ebook.getEbookNo()%>">
-						<%=ebook.getEbookTitle()%>
+			<c:set var = "i" value = "0"/>
+			<c:forEach var="m" items="${ebookList}">
+				<c:set var = "i" value = "${i+1}"/>
+				<td>
+					<div>
+						<img src="${pageContext.request.contextPath}/img/default.jpg">
+					</div>
+					<div>
+					<a href="${pageContext.request.contextPath}/EbookOneController?ebookNo=${m.ebookNo}">
+						${m.ebookTitle}
 					</a>
-				</div>
-				<div>
-					￦<%=ebook.getEbookPrice()%></div>
-			</td>
-			<%
-			// 5개보여주고 줄바꿈
-			if (i % 5 == 0) {
-			%>
-		</tr>
-		<tr>
-			<%
-			}
-			}
-			%>
-		</tr>
+					</div>
+					<div>￦${m.ebookPrice}</div>
+				</td>
+				<c:if test="${i%5 == 0}">
+					</tr><tr>
+				</c:if>
+			</c:forEach>
+		</tr>		
 	</table>
 	<!-- 페이징 -->
 	<!-- 카테고리 페이징 -->
 	<!-- 검색에 페이징 -->
-	<%
-	if (currentPage > 1) { // 첫번째 페이지는 이전버튼 비활성
-		if (categoryName == null) {
-			if (searchWord == null) {
-	%>
-		<a href="<%=request.getContextPath()%>/IndexController?currentPage=<%=currentPage-1%>">이전</a>
-	<%
-	} else {
-	%>
-		<a href="<%=request.getContextPath()%>/SearchIndexController?currentPage=<%=currentPage-1%>&searchWord=<%=searchWord%>">이전</a>
-	<%
-	}
-			
-	} else {
-	%>
-		<a href="<%=request.getContextPath()%>/IndexController?currentPage=<%=currentPage-1%>&categoryName=<%=categoryName%>">이전</a>
-	<%
-	}
-	
-	}
-	if (currentPage < lastPage) { // 마지막 페이지는 다음버튼 비활성
-		if (categoryName == null) {
-			if (searchWord == null) {
-	%>
-		<a href="<%=request.getContextPath()%>/IndexController?currentPage=<%=currentPage+1%>">다음</a>
-	<%
-	} else {
-	%>
-		<a href="<%=request.getContextPath()%>/SearchIndexController?currentPage=<%=currentPage+1%>&searchWord=<%=searchWord%>">다음</a>
-	<%
-	}
-	} else {
-	%>
-		<a href="<%=request.getContextPath()%>/IndexController?currentPage=<%=currentPage+1%>&categoryName=<%=categoryName%>">다음</a>
-	<%
-	}
-	}
-	%>
+	<!-- 첫번쨰 페이지는 이전버튼 비활성 -->
+	<c:if test="${currentPage > 1}">
+		<c:if test="${categoryName == null}">
+			<c:if test="${serchWord == null}">
+				<a href="${pageContext.request.contextPath}/IndexController?currentPage=${currentPage-1}">이전</a>
+			</c:if>
+			<c:if test="${serchWord != null}">
+				<a href="${pageContext.request.contextPath}/SearchIndexController?currentPage=${currentPage-1}&searchWord=${searchWord}">이전</a>
+			</c:if>
+		</c:if>
+		<c:if test="${categoryName != null}">
+			<a href="${pageContext.request.contextPath}/IndexController?currentPage=${currentPage-1}&categoryName=${categoryName}">이전</a>
+		</c:if>
+	</c:if>
+	<!-- 마지막 페이지는 다음버튼 비활성 -->
+	<c:if test="${currentPage < lastPage}">
+		<c:if test="${categoryName == null}">
+			<c:if test="${serchWord == null}">
+				<a href="${pageContext.request.contextPath}/IndexController?currentPage=${currentPage+1}">다음</a>
+			</c:if>
+			<c:if test="${serchWord != null}">
+				<a href="${pageContext.request.contextPath}/SearchIndexController?currentPage=${currentPage+1}&searchWord=${searchWord}">다음</a>
+			</c:if>
+		</c:if>
+		<c:if test="${categoryName != null}">
+			<a href="${pageContext.request.contextPath}/IndexController?currentPage=${currentPage+1}&categoryName=${categoryName}">다음</a>
+		</c:if>
+	</c:if>
 </body>
 </html>

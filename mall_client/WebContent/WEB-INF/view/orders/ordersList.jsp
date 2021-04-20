@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ page import="java.util.*"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,11 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%
-	List<Map<String, Object>> orderslist = (List<Map<String, Object>>)request.getAttribute("ordersList");
-	int currentPage = (int) request.getAttribute("currentPage");
-	int lastPage = (int) request.getAttribute("lastPage");
-%>
 	<!-- 메인메뉴상단 -->
 	<jsp:include page="/WEB-INF/view/inc/mainMenu.jsp"></jsp:include>
 	<!-- 주문리스트 -->
@@ -26,34 +20,25 @@
 			<td>ebookTitle</td>
 			<td>ebookPrice</td>
 		</tr>
-		<%
-		for (Map m : orderslist) {
-		%>
+		<c:forEach var="m" items="${ordersList}">
 		<tr>
-			<td><%=(Integer)(m.get("ordersNo"))%></td>
-			<td><%=(Integer)(m.get("ebookNo"))%></td>
-			<td><%=(String)(m.get("ordersDate"))%></td>
-			<td><%=(String)(m.get("ordersState"))%></td>
-			<td><%=(String)(m.get("ebookTitle"))%></td>
-			<td><%=(Integer)(m.get("ebookPrice"))%></td>
+			<td>${m.ordersNo}</td>
+			<td>${m.ebookNo}</td>
+			<td>${m.ordersDate}</td>
+			<td>${m.ordersState}</td>
+			<td>${m.ebookTitle}</td>
+			<td>${m.ebookPrice}</td>
 		</tr>
-		<%
-		}
-		%>
+		</c:forEach>
 	</table>
 	<!-- 페이징 -->
-<%
-	if(currentPage > 1) { // 첫페이지 이전버튼 비활성
-%>
-		<a href="<%=request.getContextPath()%>/OrdersListController?currentPage=<%=currentPage-1%>">이전</a>
-<%
-	}
-	
-	if(currentPage < lastPage) { // 마지막페이지 다음버튼 비활성
-%>
-		<a href="<%=request.getContextPath()%>/OrdersListController?currentPage=<%=currentPage+1%>">다음</a>
-<%
-	}
-%>
+	<!-- 첫페이지 이전버튼 비활성 -->
+	<c:if test="${currentPage > 1}"> 
+		<a href="${pageContext.request.contextPath}/OrdersListController?currentPage=${currentPage - 1}">이전</a>
+	</c:if>
+	<!-- 마지막페이지 다음버튼 비활성 -->
+	<c:if test="${currentPage < lastPage}">
+		<a href="${pageContext.request.contextPath}/OrdersListController?currentPage=${currentPage + 1}">다음</a>
+	</c:if>
 </body>
 </html>
