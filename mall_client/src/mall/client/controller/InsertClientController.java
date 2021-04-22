@@ -28,8 +28,6 @@ public class InsertClientController extends HttpServlet {
 	}
 	// action : C -> M -> redirect
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 한글인코딩
-		request.setCharacterEncoding("utf-8");
 		// request 분석
 		String ClientMail = request.getParameter("clientMail");
 		String ClientPw = request.getParameter("clientPw");

@@ -1,3 +1,5 @@
+
+
 package mall.client.model;
 
 import java.sql.*;

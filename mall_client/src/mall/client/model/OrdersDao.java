@@ -21,14 +21,14 @@ public class OrdersDao {
 		
 		// DB
 		try {
-			String sql = "SELECT t.ebook_no ebookNo, t.cnt cnt, e.ebook_title ebookTitle, e.ebook_price ebookPrice"
+			String sql = "SELECT t.ebook_no ebookNo, t.cnt cnt, e.ebook_title ebookTitle, e.ebook_price ebookPrice, e.ebook_img ebookImg, e.ebook_author ebookAuthor"
 					+ " FROM"
 					+ "	(SELECT ebook_no, COUNT(ebook_no) cnt"
 					+ "	FROM orders"
 					+ "	WHERE orders_state = '주문완료'"
 					+ "	GROUP BY ebook_no"
 					+ "	HAVING COUNT(ebook_no) > 1"
-					+ "	LIMIT 5) t INNER JOIN ebook e"
+					+ "	LIMIT 3) t INNER JOIN ebook e"
 					+ " ON t.ebook_no = e.ebook_no"
 					+ "	ORDER BY t.cnt DESC";
 			
@@ -42,6 +42,8 @@ public class OrdersDao {
 				map.put("cnt", rs.getInt("cnt"));
 				map.put("ebookTitle", rs.getString("ebookTitle"));
 				map.put("ebookPrice", rs.getInt("ebookPrice"));
+				map.put("ebookImg", rs.getString("ebookImg"));
+				map.put("ebookAuthor", rs.getString("ebookAuthor"));
 				list.add(map);
 			}
 			

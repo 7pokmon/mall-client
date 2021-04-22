@@ -21,8 +21,12 @@ public class IndexController extends HttpServlet {
 	private EbookDao ebookDao;
 	private CategoryDao categoryDao;
 	private OrdersDao ordersDao;
+	private StatsDao statsDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("/IndexController 시작");
+		
 		// model 호출
+		this.statsDao = new StatsDao();
 		this.ebookDao = new EbookDao();
 		this.categoryDao = new CategoryDao();
 		this.ordersDao = new OrdersDao();
@@ -39,7 +43,7 @@ public class IndexController extends HttpServlet {
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
 		// 페이지당 보여줄 수
-		int rowPerPage = 15;
+		int rowPerPage = 9;
 		// 첫페이지
 		int beginRow = (currentPage - 1) * rowPerPage;
 		// 전체페이지
@@ -49,7 +53,13 @@ public class IndexController extends HttpServlet {
 		if (totalRow % rowPerPage != 0) {
 			lastPage += 1;
 		}
-
+		// 접속자 관련 데이터
+		long total = this.statsDao.selectStatsTotal();
+		Stats stats = this.statsDao.selectStatsByToday();
+		long statsCount = 0;
+		if(stats != null) {
+			statsCount = stats.getStatsCount();
+		}
 		// 카테리고리별 목록 호출
 		List<Ebook> ebookList = this.ebookDao.selectCategoryByPage(beginRow, rowPerPage, categoryName);
 		// 카테고리목록 호출
@@ -59,6 +69,8 @@ public class IndexController extends HttpServlet {
 		
 		// View forward
 		// request안에 데이터담기
+		request.setAttribute("total", total);
+		request.setAttribute("statsCount", statsCount);
 		request.setAttribute("bestOrdersList", bestOrdersList);
 		request.setAttribute("categoryName", ebook.getCategoryName());
 		request.setAttribute("currentPage", currentPage);

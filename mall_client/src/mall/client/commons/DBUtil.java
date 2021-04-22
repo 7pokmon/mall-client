@@ -7,7 +7,6 @@ public class DBUtil {
 	public Connection getConnection() {
 		Connection conn = null; // 초기화
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/mall", "root", "java1004");
 		} catch (Exception e) { // 예외가나타나면
 			e.printStackTrace(); // 예외메세지출력

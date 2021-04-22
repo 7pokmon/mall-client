@@ -69,8 +69,6 @@ public class SearchIndexController extends HttpServlet {
 
 	// 검색시도
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 한글인코딩
-		request.setCharacterEncoding("UTF-8");
 		// model 호출
 		this.ebookDao = new EbookDao();
 		this.categoryDao = new CategoryDao();

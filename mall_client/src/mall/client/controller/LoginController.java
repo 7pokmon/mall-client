@@ -22,8 +22,6 @@ public class LoginController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/IndexController");
 			return;
 		}
-		// 한글 인코딩
-		request.setCharacterEncoding("utf-8");
 		String ClientMail = request.getParameter("clientMail");
 		String ClinetPw = request.getParameter("clientPw");
 		Client client = new Client();
